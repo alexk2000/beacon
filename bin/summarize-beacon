@@ -1,1 +1,38 @@
-# Placeholder for your script.
+#!/usr/bin/env python3
+
+import argparse
+from beacon import countdigits
+from beacon import printdigits
+from beacon import gettimestamp
+from beacon import getbeacon
+from beacon import getlastbeacon
+
+def main():
+    parser = argparse.ArgumentParser()
+    parser.add_argument("--from", type=str, dest='arg_from')
+    parser.add_argument("--to", type=str, dest='arg_to')
+    args = parser.parse_args()
+
+    if not args.arg_from and not args.arg_to:
+        text = getlastbeacon()
+        sym_count = countdigits(text)
+        printdigits(sym_count)
+    else:
+        from_timestamp = gettimestamp(args.arg_from)
+        to_timestamp = gettimestamp(args.arg_to)
+
+        if from_timestamp < 1378395540 or to_timestamp < 1378395540:
+            print("The value of the parameter is outside the allowed time interval")
+            exit(1)
+
+        tm = from_timestamp
+        sym_count = {}
+        while tm <= to_timestamp:
+            beacon = getbeacon(tm)
+            sym_count = countdigits(beacon, sym_count)
+            tm += 60
+
+        printdigits(sym_count)
+
+if '__main__' == __name__:
+    main()
