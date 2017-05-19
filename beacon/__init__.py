@@ -1,6 +1,3 @@
-from .beacon import countdigits
-from .beacon import printdigits
-from .beacon import gettimestamp
-from .beacon import getbeacon
-from .beacon import getlastbeacon
+from .beacon import Beacon
 
+__all__ = ["Beacon", "BEACON_START_TIME", "BEACON_URL", "BEACON_URL_LAST"]

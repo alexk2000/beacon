@@ -1,38 +1,24 @@
-#!/usr/bin/env python3
+#!/usr/bin/python3
 
 import argparse
-from beacon import countdigits
-from beacon import printdigits
-from beacon import gettimestamp
-from beacon import getbeacon
-from beacon import getlastbeacon
+from beacon import Beacon
 
-def main():
-    parser = argparse.ArgumentParser()
-    parser.add_argument("--from", type=str, dest='arg_from')
-    parser.add_argument("--to", type=str, dest='arg_to')
-    args = parser.parse_args()
+parser = argparse.ArgumentParser()
+parser.add_argument("--from", dest="from_date")
+parser.add_argument("--to", dest="to_date")
+args = parser.parse_args()
 
-    if not args.arg_from and not args.arg_to:
-        text = getlastbeacon()
-        sym_count = countdigits(text)
-        printdigits(sym_count)
-    else:
-        from_timestamp = gettimestamp(args.arg_from)
-        to_timestamp = gettimestamp(args.arg_to)
+app = Beacon()
 
-        if from_timestamp < 1378395540 or to_timestamp < 1378395540:
-            print("The value of the parameter is outside the allowed time interval")
-            exit(1)
+if args.from_date and args.to_date:
 
-        tm = from_timestamp
-        sym_count = {}
-        while tm <= to_timestamp:
-            beacon = getbeacon(tm)
-            sym_count = countdigits(beacon, sym_count)
-            tm += 60
+	app.main(args.from_date,args.to_date)
 
-        printdigits(sym_count)
+elif args.from_date == None and args.to_date == None:
 
-if '__main__' == __name__:
-    main()
+	app.main()
+
+else:
+
+	print("none or both --from and --to should be specified")
+
